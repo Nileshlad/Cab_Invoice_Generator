@@ -2,14 +2,15 @@ import java.util.ArrayList;
 
 public class CabInvoiceGenerator {
     //TO CONSTANTS
-    private static final double COST_PER_KILOMETER = 10;
-    private static final int COST_PER_MINUTE = 1;
-    private static final int MINIMUM_FARE = 5;
+    private double COST_PER_KILOMETER;
+    private int COST_PER_MINUTE;
+    private int MINIMUM_FARE;
 
     //VARIABLE
     double totalFare = 0;
 
     RideRepository rideRepository = null;
+
 
     CabInvoiceGenerator() {
         this.rideRepository = new RideRepository();
@@ -21,23 +22,32 @@ public class CabInvoiceGenerator {
 
     //TO METHOD TO GET TOTAL FARE FOR JOURNEY
     public double getTotalFare(Ride[] rides) {
-        for (Ride ride : rides) {
-            totalFare = ride.distanceInKiloMeter * COST_PER_KILOMETER + ride.travelPerMinute * COST_PER_MINUTE;
+        public double getTotalFare ( double distanceInKiloMeter, int travelPerMinute, RideType type){
+            setValue(type);
+            totalFare = distanceInKiloMeter * COST_PER_KILOMETER + travelPerMinute * COST_PER_MINUTE;
+            return Math.max(MINIMUM_FARE, totalFare);
+
         }
-        return Math.max(MINIMUM_FARE, totalFare);
-    }
 
-    //TO METHOD TO GET INVOICE DETAILS
-    public InvoiceDetails getInvoiceDetails(String userId) {
-        ArrayList userRides = rideRepository.getRideDetails(userId);
-        Ride[] rides = new Ride[userRides.size()];
-        userRides.toArray(rides);
-        double totalFare = getTotalFare(rides);
-        return new InvoiceDetails(rides.length, totalFare);
+        //TO METHOD TO GET INVOICE DETAILS
+        public InvoiceDetails getInvoiceDetails (String userId){
+            ArrayList userRides = rideRepository.getRideDetails(userId);
+            Ride[] rides = new Ride[userRides.size()];
+            userRides.toArray(rides);
+            for (Ride ride : rides) {
+                totalFare += this.getTotalFare(ride.distanceInKiloMeter, ride.travelPerMinute, ride.type);
+            }
+            return new InvoiceDetails(rides.length, totalFare);
 
-    }
+        }
 
-    public void addRides(String userId, Ride[] rides) {
-        rideRepository.addRide(userId, rides);
+        //TO SET VALUE
+        private void setValue (RideType type){
+            this.COST_PER_KILOMETER = type.costPerKilometer;
+            this.COST_PER_MINUTE = type.timePerMinute;
+            this.MINIMUM_FARE = type.minimumFare;
+        }
+        public void addRides (String userId, Ride[]rides){
+            rideRepository.addRide(userId, rides);
+        }
     }
-}
