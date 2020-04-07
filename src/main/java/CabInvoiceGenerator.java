@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class CabInvoiceGenerator {
     //TO CONSTANTS
     private static final double COST_PER_KILOMETER = 10;
@@ -7,6 +9,11 @@ public class CabInvoiceGenerator {
     //VARIABLE
     double totalFare = 0;
 
+    RideRepository rideRepository = null;
+
+    CabInvoiceGenerator() {
+        this.rideRepository = new RideRepository();
+    }
 
     public static void main(String[] args) {
         System.out.println("Welcome to cab invoice generator");
@@ -21,9 +28,16 @@ public class CabInvoiceGenerator {
     }
 
     //TO METHOD TO GET INVOICE DETAILS
-    public InvoiceDetails getInvoiceDetails(Ride[] rides) {
+    public InvoiceDetails getInvoiceDetails(String userId) {
+        ArrayList userRides = rideRepository.getRideDetails(userId);
+        Ride[] rides = new Ride[userRides.size()];
+        userRides.toArray(rides);
         double totalFare = getTotalFare(rides);
         return new InvoiceDetails(rides.length, totalFare);
 
+    }
+
+    public void addRides(String userId, Ride[] rides) {
+        rideRepository.addRide(userId, rides);
     }
 }
