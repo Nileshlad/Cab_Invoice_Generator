@@ -19,4 +19,11 @@ public class CabInvoiceGenerator {
         }
         return Math.max(MINIMUM_FARE, totalFare);
     }
+
+    //TO METHOD TO GET INVOICE DETAILS
+    public InvoiceDetails getInvoiceDetails(Ride[] rides) {
+        double totalFare = getTotalFare(rides);
+        return new InvoiceDetails(rides.length, totalFare);
+
+    }
 }
