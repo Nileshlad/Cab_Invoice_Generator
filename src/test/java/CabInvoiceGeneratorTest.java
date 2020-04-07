@@ -1,8 +1,8 @@
-
 import org.junit.Assert;
 import org.junit.Test;
 
 public class CabInvoiceGeneratorTest {
+
     //CREATE OBJECT OF MAIN CLASS
     CabInvoiceGenerator cabInvoiceGenerator = new CabInvoiceGenerator();
 
@@ -58,7 +58,7 @@ public class CabInvoiceGeneratorTest {
     }
 
     @Test
-    public void givenUserId_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnListOfInvoiceDetails() {
+    public void givenDistanceTimeRideType_InvoiceGeneratorGenerateFareForRide_ShouldReturnInvoiceDetails() {
         String userId = "user";
         Ride[] rides = {new Ride(2.0, 5, RideType.NORMAL), new Ride(2.0, 5, RideType.PREMIUM)};
         cabInvoiceGenerator.addRides(userId, rides);

@@ -4,10 +4,10 @@ public class Ride {
     public final RideType type;
 
 
-    public Ride(double distance, int time,RideType type) {
+    public Ride(double distance, int time, RideType type) {
         this.distanceInKiloMeter = distance;
         this.travelPerMinute = time;
-        this.type=type;
+        this.type = type;
 
     }
 }
